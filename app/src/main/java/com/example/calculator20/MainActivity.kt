@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val window = this.window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = 0xF0F0F0.toInt()
+        window.statusBarColor = 0xF0F0F0
         initButtons()
     }
     fun initButtons () {
@@ -156,6 +156,7 @@ class MainActivity : AppCompatActivity() {
             if (TYPING) {
                 GLOBAL_RESULT += SECOND_OPERAND
                 result.text = "$GLOBAL_RESULT"
+                DblToInt()
                 TYPING = false
             }
         }
@@ -164,6 +165,7 @@ class MainActivity : AppCompatActivity() {
             if (TYPING) {
                 GLOBAL_RESULT -= SECOND_OPERAND
                 result.text = "$GLOBAL_RESULT"
+                DblToInt()
                 TYPING = false
             }
         }
@@ -172,6 +174,7 @@ class MainActivity : AppCompatActivity() {
             if (TYPING) {
                 GLOBAL_RESULT *= SECOND_OPERAND
                 result.text = "$GLOBAL_RESULT"
+                DblToInt()
                 TYPING = false
             }
         }
@@ -181,6 +184,7 @@ class MainActivity : AppCompatActivity() {
                 if (SECOND_OPERAND != 0.0) {
                     GLOBAL_RESULT /= SECOND_OPERAND
                     result.text = "$GLOBAL_RESULT"
+                    DblToInt()
                     TYPING = false
                 } else {
                     result.text = "ERROR"
@@ -201,6 +205,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    @SuppressLint("SetTextI18n")
     fun AddPoint () {
         if (result.text != "ERROR") {
             if (!result.text.contains(".")) {
@@ -208,10 +213,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    @SuppressLint("SetTextI18n")
     fun ChangeMark () {
-        if (result.text.toString().toDouble() !=0.0) {
-            result.text = (result.text.toString().toDouble() * (-1)).toString()
-            TYPING = false
+        if(result.text!="ERROR"){
+            if(result.text.toString()!="0"){
+                if(result.text.toString()[0]=='-'){
+                    result.text=result.text.toString().replace("-","")
+                    TYPING = false
+                }else{
+                    result.text = "-${result.text}"
+                    TYPING = false
+                }
+                if(GLOBAL_RESULT!=0.0){
+                    GLOBAL_RESULT=-GLOBAL_RESULT.toString().toDouble()
+                    TYPING = false
+                }
+            }
+        }
+    }
+    fun DblToInt () {
+        if (GLOBAL_RESULT.toString().endsWith(".0")) {
+            result.text = "${GLOBAL_RESULT.toInt()}"
+        }else {
+            result.text = "$GLOBAL_RESULT"
         }
     }
 }
